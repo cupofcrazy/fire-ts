@@ -8,5 +8,5 @@ export const StyledTextInput = styled.input`
   font-size: 16px;
   width: 100%;
   margin: 0 0 .5rem 0;
-  background-color: rgba(255, 255. 255, .1);
+  background-color: rgba(255, 255. 255, .1ya);
 `

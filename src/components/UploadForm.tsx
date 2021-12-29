@@ -151,7 +151,7 @@ export const UploadForm = ({ onClose }: Props) => {
     })
   }
   return (
-    <StyledContainer color={imageColor} >
+    <StyledContainer color={imageColor}>
       <StyledProgress progress={state.progress} />
       <Header>
         <StyledButton onClick={onClose}><XIcon width={24} height={24} color='#fff' /></StyledButton>
@@ -159,48 +159,87 @@ export const UploadForm = ({ onClose }: Props) => {
 
       <StyledMain>
         {(imagePreview && selectedFile) ? (
-          <div>
-            <StyledImage>
-              <button onClick={handleClearImage}>
-                <XCircleIcon width={42} height={42} color="#fff" />
-              </button>
-              <img
+          <Form>
+            <FormLeft>
+              <StyledImagePreview
                 src={imagePreview}
                 alt="Selected Image for Upload"
                 onLoad={onImageLoad}
-                
-                ref={imagePreviewRef} />
-            </StyledImage>
-            <StyledImageInfo>
+                ref={imagePreviewRef}
+              />
+            </FormLeft>
+            <FormRight>
+              <StyledTextInput type="text" placeholder="The quick brown fox..." disabled={state.status}  />
+              <UploadButton onClick={handleUpload} disabled={state.status}>Upload</UploadButton>
+            </FormRight>
+            {/* <StyledImage> */}
+              {/* <button onClick={handleClearImage}>
+                <XCircleIcon width={42} height={42} color="#fff" />
+              </button> */}
+              
+            {/* </StyledImage> */}
+            {/* <StyledImageInfo> */}
               {/* <p><span>Name:</span> { selectedFile.name }</p>
               <p><span>Image Size:</span> { toMegaBytes(selectedFile?.size) }</p>
             <ImageColor color={imageColor!} /> */}
-            </StyledImageInfo>
-            <StyledTextInput type="text" placeholder="The quick brown fox..." disabled={state.status}  />
-            <UploadButton onClick={handleUpload} disabled={state.status}>Upload</UploadButton>
-          </div>
+            {/* </StyledImageInfo> */}
+            
+          </Form>
         ) : (
-          <StyledUploadButton>
-            <input type="file"
-              onChange={ (e) => handleFileChange(e) }
-            />
-            Select image to upload
-          </StyledUploadButton>
+          <UploadContainer>
+            <StyledUploadButton>
+              <input type="file"
+                onChange={ (e) => handleFileChange(e) }
+              />
+              Select image to upload
+            </StyledUploadButton>
+          </UploadContainer>
         )}
       </StyledMain>
     </StyledContainer>
   )
 }
 
+const Form = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+`
+
+const FormLeft = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20%;
+
+`
+
+const UploadContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`
+
+const FormRight = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, .25);
+  padding: 0 15%;
+
+`
+
 const StyledContainer = styled.div`
   width: 100%;
   height: 100vh;
   position: fixed;
+
   top: 0;
   left: 0;
   background-color: ${({ color }: { color: string | undefined }) => `${color ? color : 'rgba(1, 1, 1, .5)' }` };;
   z-index: 0;
-  padding: 1rem;
   transition: all .5s ease;
   backdrop-filter: saturate(300%) blur(25px);
   opacity: 1;
@@ -238,42 +277,26 @@ const StyledProgress = styled.div`
 
 
 const StyledMain = styled.div`
-  display: flex;
+  /* display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  padding: 2rem 0;
-  height: calc(100vh - 5rem);
+  flex-direction: column; */
+  /* height: calc(100vh - 5rem); */
 
 `
 
 const Header = styled.header`
   display: flex;
   justify-content: flex-end;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  padding: 1rem;
 `
 
-const StyledImage = styled.div`
-  position: relative;
-  border-radius: .5rem;
-  width: 50%;
-  margin: .5rem auto;
-
-  @media ${mq.mobileLg} {
-    width: 300px;
-  }
-
-  @media ${mq.tablet} {
-    width: 400px;
-  }
-  button {
-    position: absolute;
-    top: -1rem;
-    right: -1rem;
-  }
-  img {
-    border-radius: .5rem;
-    width: 100%;
-  }
+const StyledImagePreview = styled.img`
+  border-radius: .25rem;
   
 `
 

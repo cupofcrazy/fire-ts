@@ -3,9 +3,11 @@ import { NavLink } from './NavLink'
 import styled from 'styled-components'
 import { UploadIcon } from '@heroicons/react/outline'
 import { UploadForm } from './UploadForm'
+import { useAuth } from '../contexts/AuthContext';
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const { user } = useAuth()
   const navItems = [
     { name: 'index', href: '/' },
     // { name: 'information', href: '/information' },
@@ -19,12 +21,20 @@ const Nav = () => {
   return (
     <StyledNav>
       <ul>
-        { navItems.map(item => (
-          <NavLink key={item.name} to={item.href}>{ item.name }</NavLink> 
+        {navItems.map(item => (
+          <NavLink key={item.name} to={item.href}>{item.name}</NavLink>
         ))}
-        <button onClick={(e) => openUploadForm(e) }><UploadIcon width={16} height={16} color="#111" /></button>
+        {user &&
+          <button
+            onClick={(e) => openUploadForm(e)}>
+            <UploadIcon
+              width={16}
+              height={16}
+              color="#111" />
+          </button>
+        }
       </ul>
-      { isOpen && <UploadForm onClose={() => setIsOpen(false)} /> }
+      {isOpen && <UploadForm onClose={() => setIsOpen(false)} />}
     </StyledNav>
   )
 }

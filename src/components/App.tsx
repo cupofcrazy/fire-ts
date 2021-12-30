@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import styled from 'styled-components'
 import { AuthProvider, RequireAuth } from '../contexts/AuthContext';
-import { Header } from './Header'
+import { Header } from './layout/Header'
 
 // Pages Imports
 import Home from '../pages/Home'

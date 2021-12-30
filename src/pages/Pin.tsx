@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { db, storage } from '../lib/firebase';
-import { Doc } from '../types'
+import { PinDocType } from '../types'
 import { ProfileImage } from '../components/ProfileImage';
 import { useAuth } from '../contexts/AuthContext';
 import { deleteObject, ref } from 'firebase/storage';

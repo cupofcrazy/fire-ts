@@ -1,7 +1,7 @@
 import type { User } from "firebase/auth"
 import type { Timestamp } from "firebase/firestore"
 
-export type Doc = {
+export type PinDocType = {
   name: string,
   id?: string,
   image: string,

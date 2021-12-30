@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { NavLink } from './NavLink'
 import styled from 'styled-components'
 import { UploadIcon } from '@heroicons/react/outline'
-import { UploadForm } from './UploadForm'
-import { useAuth } from '../contexts/AuthContext';
+import { UploadForm } from '../UploadForm'
+import { useAuth } from '../../contexts/AuthContext';
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -43,7 +43,7 @@ export default Nav
 
 
 const StyledNav = styled.nav`
-  
+  z-index: 1000;
   ul {
     display: flex;
     gap: 2rem;

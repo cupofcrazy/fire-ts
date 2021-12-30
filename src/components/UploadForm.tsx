@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid'
 import { addDoc, doc, getDoc, collection, Timestamp } from '@firebase/firestore';
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage'
 import { XCircleIcon, XIcon } from '@heroicons/react/solid'
-import { Doc } from '../types';
+import { PinDocType } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { getImageColor, mq, toMegaBytes } from '../utils';
 import { storage, db } from '../lib/firebase';
@@ -126,7 +126,7 @@ export const UploadForm = ({ onClose }: Props) => {
       const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
       
       // Push to Firestore
-      const docData: Doc = {
+      const docData: PinDocType = {
         name: pinId,
         image: downloadURL,
         color: imageColor!,
@@ -204,6 +204,7 @@ const Form = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 100vh;
+  
 `
 
 const FormLeft = styled.div`
@@ -235,14 +236,13 @@ const StyledContainer = styled.div`
   width: 100%;
   height: 100vh;
   position: fixed;
-
   top: 0;
   left: 0;
-  background-color: ${({ color }: { color: string | undefined }) => `${color ? color : 'rgba(1, 1, 1, .5)' }` };;
-  z-index: 0;
+  background-color: ${({ color }: { color: string | undefined }) => `${color ? color : 'rgba(1, 1, 1, .5)' }` };
   transition: all .5s ease;
   backdrop-filter: saturate(300%) blur(25px);
   opacity: 1;
+  z-index: 9999;
 `
 
 const StyledButton = styled.button`

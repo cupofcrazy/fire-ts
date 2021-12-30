@@ -1,9 +1,10 @@
 import type { User } from 'firebase/auth'
 import { useState } from 'react'
 import styled from 'styled-components'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import Nav from './Nav'
 import cn from 'classnames';
+import { UserDoc } from '../../types/index';
 
 
 export const Header = () => {
@@ -32,7 +33,7 @@ export const Header = () => {
 }
 
 
-const ProfileImage = ({ user }: { user: User }) => {
+const ProfileImage = ({ user }: { user: UserDoc }) => {
   console.log(user)
   return (
     <StyledImage

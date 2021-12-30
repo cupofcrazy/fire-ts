@@ -16,14 +16,29 @@ export const PinGridItem = ({ pin }: PinProps) => {
 
   return (
     <StyledPin to={`/pin/${pin.id}`}>
-      <StyledGridImage
-        key={pin.id}
-        style={{ backgroundColor: pin.color }}
-        src={pin?.image}
-        alt={'Image'} />
+      <div style={{
+          position: 'relative',
+          paddingTop: `calc(100% / ${pin.metadata.aspectRatio})`,
+          backgroundColor: pin.metadata.color,
+          zIndex: -1
+        }}>
+        <StyledGridImage
+          key={pin.id}
+          style={{
+            position: 'absolute',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%',
+            top: 0,
+            left: 0,
+            
+          }}
+          src={pin?.image}
+          alt={'Image'} />
+      </div>
       <div className="pin-info">
         <p>{ pin.user.username }</p>
-        <span style={{ backgroundColor: pin.color }}></span>
+        <span style={{ backgroundColor: pin.metadata.color }}></span>
       </div>
     </StyledPin>
   )

@@ -52,12 +52,19 @@ const initialState = {
   status: false
 }
 
+const imageMetadataDefaults: PinDocType['metadata'] = {
+  width: 0,
+  height: 0,
+  aspectRatio: 0,
+  color: '#EEEEEE'
+}
+
 export const UploadForm = ({ onClose }: Props) => {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [imageColor, setImageColor] = useState<string | undefined>()
+  const [imageMetadata, setImageMetadata] = useState<PinDocType['metadata']>(imageMetadataDefaults)
   const [state, dispatch] = useReducer(reducer, initialState)
   const imagePreviewRef = useRef(null)
 
@@ -72,6 +79,8 @@ export const UploadForm = ({ onClose }: Props) => {
     const file = e.target.files[0]
     console.log({ file })
     setSelectedFile(file)
+
+    // const image = new Image()
     
     // Create Image URL
     const selectedFileURL = URL.createObjectURL(file)
@@ -81,15 +90,26 @@ export const UploadForm = ({ onClose }: Props) => {
     setImagePreview(selectedFileURL)
   }
 
-  const onImageLoad = () => {
+  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.log(e)
+    const imageElement = e?.currentTarget;
+    const imageAspectRatio = imageElement.width / imageElement.height
+    console.log({ imageAspectRatio })
+
     const hexValue = getImageColor(imagePreviewRef?.current!)
     console.log({ hexValue })
-    setImageColor(hexValue)
+
+    setImageMetadata({
+      width: imageElement.width,
+      height: imageElement.height,
+      color: hexValue,
+      aspectRatio: imageAspectRatio
+    })
   }
 
   const handleClearImage = () => {
     setSelectedFile(null)
-    setImageColor(undefined)
+    // setImageColor(undefined)
     setImagePreview(null)
   }
 
@@ -129,8 +149,8 @@ export const UploadForm = ({ onClose }: Props) => {
       const docData: PinDocType = {
         name: pinId,
         image: downloadURL,
-        color: imageColor!,
         createdAt: Timestamp.fromDate(new Date()),
+        metadata: imageMetadata,
         user: {
           uid: user?.uid!,
           photoURL: user?.photoURL!,
@@ -151,7 +171,7 @@ export const UploadForm = ({ onClose }: Props) => {
     })
   }
   return (
-    <StyledContainer color={imageColor}>
+    <StyledContainer color={imageMetadata.color}>
       <StyledProgress progress={state.progress} />
       <Header>
         <StyledButton onClick={onClose}><XIcon width={24} height={24} color='#fff' /></StyledButton>
@@ -164,13 +184,13 @@ export const UploadForm = ({ onClose }: Props) => {
               <StyledImagePreview
                 src={imagePreview}
                 alt="Selected Image for Upload"
-                onLoad={onImageLoad}
+                onLoad={(e) => onImageLoad(e)}
                 ref={imagePreviewRef}
               />
             </FormLeft>
             <FormRight>
               <StyledTextInput type="text" placeholder="The quick brown fox..." disabled={state.status}  />
-              <UploadButton onClick={handleUpload} disabled={state.status}>Upload</UploadButton>
+              <UploadButton onClick={handleUpload} disabled={state.status}>{ state.status ? `${state.progress.toFixed(0)}%` : 'Upload' }</UploadButton>
             </FormRight>
             {/* <StyledImage> */}
               {/* <button onClick={handleClearImage}>
@@ -201,9 +221,13 @@ export const UploadForm = ({ onClose }: Props) => {
 }
 
 const Form = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   height: 100vh;
+  flex-direction: column;
+
+  @media ${mq.tablet} {
+    flex-direction: row;
+  }
   
 `
 
@@ -211,7 +235,8 @@ const FormLeft = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20%;
+  padding: 10%;
+  flex: 1;
 
 `
 
@@ -229,6 +254,7 @@ const FormRight = styled.div`
   flex-direction: column;
   background-color: rgba(0, 0, 0, .25);
   padding: 0 15%;
+  flex: 1;
 
 `
 

@@ -5,8 +5,13 @@ export type PinDocType = {
   name: string,
   id?: string,
   image: string,
-  color: string,
   createdAt: Timestamp,
+  metadata: {
+    color?: string,
+    width?: number,
+    height?: number,
+    aspectRatio?: number
+  },
   user: {
     uid: User["uid"],
     photoURL: User["photoURL"],

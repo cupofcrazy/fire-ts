@@ -62,3 +62,7 @@ export const getUserDoc = async (uid: string): Promise<UserDoc> => {
   // }
   return docSnap.data() as UserDoc;
 }
+
+export const formatNumber = (num: number): string => {
+  return num < 10 ? `0${num}` : num.toString();
+}

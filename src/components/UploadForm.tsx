@@ -1,16 +1,16 @@
 import React, { useReducer, useState, useRef } from 'react'
-import styled from 'styled-components'
 import { v4 as uuid } from 'uuid'
 import { addDoc, doc, getDoc, collection, Timestamp } from '@firebase/firestore';
-import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage'
-import { XCircleIcon, XIcon } from '@heroicons/react/solid'
-import { PinDocType } from '../types';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import { XIcon } from '@heroicons/react/solid'
+import type { PinDocType } from '../types';
 import { useAuth } from '../contexts/AuthContext';
-import { getImageColor, mq, toMegaBytes } from '../utils';
+import { getImageColor } from '../utils';
 import { storage, db } from '../lib/firebase';
 import { useNavigate } from 'react-router-dom';
 import { UploadButton } from './Button';
-import { StyledTextInput } from '../styles/index';
+import { StyledTextInput } from '../styles';
+import { Styled } from '../styles/upload-form.styles';
 
 interface Props {
   onClose: () => void;
@@ -137,10 +137,11 @@ export const UploadForm = ({ onClose }: Props) => {
       })
     }, (err) => {
       // Handle error
+      console.log({ err })
 
     }, async () => {
       // Handle success
-      
+      console.log('File Uploaded')
       
       // Get download URL
       const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
@@ -171,27 +172,27 @@ export const UploadForm = ({ onClose }: Props) => {
     })
   }
   return (
-    <StyledContainer color={imageMetadata.color}>
-      <StyledProgress progress={state.progress} />
-      <Header>
-        <StyledButton onClick={onClose}><XIcon width={24} height={24} color='#fff' /></StyledButton>
-      </Header>
+    <Styled.Container color={imageMetadata.color}>
+      <Styled.Progress progress={state.progress} />
+      <Styled.Header>
+        <Styled.Button onClick={onClose}><XIcon width={24} height={24} color='#fff' /></Styled.Button>
+      </Styled.Header>
 
-      <StyledMain>
+      <Styled.Main>
         {(imagePreview && selectedFile) ? (
-          <Form>
-            <FormLeft>
-              <StyledImagePreview
+          <Styled.Form>
+            <Styled.FormLeft>
+              <Styled.ImagePreview
                 src={imagePreview}
                 alt="Selected Image for Upload"
                 onLoad={(e) => onImageLoad(e)}
                 ref={imagePreviewRef}
               />
-            </FormLeft>
-            <FormRight>
+            </Styled.FormLeft>
+            <Styled.FormRight>
               <StyledTextInput type="text" placeholder="The quick brown fox..." disabled={state.status}  />
               <UploadButton onClick={handleUpload} disabled={state.status}>{ state.status ? `${state.progress.toFixed(0)}%` : 'Upload' }</UploadButton>
-            </FormRight>
+            </Styled.FormRight>
             {/* <StyledImage> */}
               {/* <button onClick={handleClearImage}>
                 <XCircleIcon width={42} height={42} color="#fff" />
@@ -204,137 +205,20 @@ export const UploadForm = ({ onClose }: Props) => {
             <ImageColor color={imageColor!} /> */}
             {/* </StyledImageInfo> */}
             
-          </Form>
+          </Styled.Form>
         ) : (
-          <UploadContainer>
-            <StyledUploadButton>
+          <Styled.UploadContainer>
+            <Styled.UploadButton>
               <input type="file"
                 onChange={ (e) => handleFileChange(e) }
               />
               Select image to upload
-            </StyledUploadButton>
-          </UploadContainer>
+            </Styled.UploadButton>
+          </Styled.UploadContainer>
         )}
-      </StyledMain>
-    </StyledContainer>
+      </Styled.Main>
+    </Styled.Container>
   )
 }
 
-const Form = styled.div`
-  display: flex;
-  height: 100vh;
-  flex-direction: column;
 
-  @media ${mq.tablet} {
-    flex-direction: row;
-  }
-  
-`
-
-const FormLeft = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10%;
-  flex: 1;
-
-`
-
-const UploadContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`
-
-const FormRight = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background-color: rgba(0, 0, 0, .25);
-  padding: 0 15%;
-  flex: 1;
-
-`
-
-const StyledContainer = styled.div`
-  width: 100%;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: ${({ color }: { color: string | undefined }) => `${color ? color : 'rgba(1, 1, 1, .5)' }` };
-  transition: all .5s ease;
-  backdrop-filter: saturate(300%) blur(25px);
-  opacity: 1;
-  z-index: 9999;
-`
-
-const StyledButton = styled.button`
-  background-color: transparent;
-`
-
-const StyledImageInfo = styled.div`
-  text-align: center;
-  mix-blend-mode: difference;
-  p {
-    margin-bottom: .5rem;
-    color: #fff;
-    font-weight: 500;
-    font-size: 1.25rem;
-
-    span {
-      opacity: .5;
-    }
-  }
-`
-
-const StyledProgress = styled.div`
-  height: 100%;
-  position: absolute;
-  width: ${({ progress }: { progress: number }) => `${progress}%` };
-  transition: all .3s ease;
-  background-color: rgba(0, 0, 0, .3);
-  top: 0;
-  left: 0;
-  z-index: -1;
-`
-
-
-const StyledMain = styled.div`
-  /* display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column; */
-  /* height: calc(100vh - 5rem); */
-
-`
-
-const Header = styled.header`
-  display: flex;
-  justify-content: flex-end;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  padding: 1rem;
-`
-
-const StyledImagePreview = styled.img`
-  border-radius: .25rem;
-  
-`
-
-const StyledUploadButton = styled.label`
-  cursor: pointer;
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, .25);
-  color: #111;
-  padding: 1.25rem 1.75rem;
-  border-radius: 10rem;
-
-  input[type="file"] {
-    display: none;
-  }
-`

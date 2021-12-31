@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { mq } from 'utils';
+import { mq } from '../utils';
 
 
 const Form = styled.div`

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { PinGridItem } from './PinGridItem';
 import { PinDocType } from '../../types';
 import { mq } from '../../utils';
+import { Button } from '../Button';
 
 
 interface Props {

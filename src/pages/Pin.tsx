@@ -1,12 +1,12 @@
-import { deleteDoc, doc, DocumentData, getDoc } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import { deleteDoc, doc, DocumentData, getDoc, collection } from 'firebase/firestore';
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { db, storage } from '../lib/firebase';
-import { PinDocType } from '../types'
-import { ProfileImage } from '../components/ProfileImage';
 import { useAuth } from '../contexts/AuthContext';
 import { deleteObject, ref } from 'firebase/storage';
+import { XIcon } from '@heroicons/react/outline';
+import { setDoc } from '@firebase/firestore';
 
 interface Props {}
 
@@ -29,6 +29,27 @@ const Pin = () => {
   const params = useParams()
   const navigate = useNavigate()
 
+  const savePin = async () => {
+    const ref = doc(db, `users/${user?.uid!}/saves`, pin.id)
+    await setDoc(ref, {
+      id: pin.id
+    }, {
+      merge: true
+    })
+  }
+
+  const disablePin = (id: string) => {
+    const pinRef = doc(db, `users/${user?.uid!}/saves`, id)
+    getDoc(pinRef).then(pinSnapshot => {
+      if (pinSnapshot.exists()) {
+        return true
+      }
+
+    })
+
+    return true
+  }
+
   const deletePin = async (id: string) => {
     const pinRef = ref(storage, `images/${user?.username}/${pin.name}`)
     try {
@@ -49,7 +70,7 @@ const Pin = () => {
     console.log(pin)
   }, [])
   return (
-    <div >
+    <StyledPage color={'#fff'}>
       <StyledHeader>
         <div className="pin-info">
           <h3>{ pin?.id }</h3>
@@ -59,18 +80,29 @@ const Pin = () => {
           </Link>
         </div>
         <div className="pin-options">
-          <button>Save</button>
+          <button onClick={savePin}>Save</button>
           <button>Show Details</button>
           { user?.uid === pin?.user?.uid && <button onClick={ () => deletePin(pin?.id)}>Delete</button> }
+          <button aria-label='Close' title="Close" onClick={() => navigate('/')}><XIcon width={24} height={24} /></button>
         </div>
       </StyledHeader>
-      <StyledImage src={pin?.image} width={300} alt={pin?.id} />
-    </div>
+      <StyledImage src={pin?.image} style={{ width: '50%' }} alt={pin?.id} />
+    </StyledPage>
   )
 }
 
 export default Pin
 
+const StyledPage = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${({ color }) => color || '#eee' };
+  padding: 1rem;
+  overflow-y: scroll;
+`
 
 const StyledImage = styled.img`
   margin: 1rem auto;
@@ -78,7 +110,7 @@ const StyledImage = styled.img`
 
 const StyledHeader = styled.header`
   width: 100%;
-  padding: 2rem 0 1rem 0;
+  /* padding: 2rem 0 1rem 0; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -104,6 +136,10 @@ const StyledHeader = styled.header`
     &:focus, &:hover {
       background-color: rgba(0, 0, 0, .05);
 
+    }
+
+    &::disabled {
+      color: red;
     }
   }
 

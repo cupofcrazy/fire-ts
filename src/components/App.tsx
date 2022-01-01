@@ -10,6 +10,7 @@ import Login from '../pages/Login'
 import NotFound from '../pages/NotFound'
 import Protected from '../pages/Protected'
 import Pin from '../pages/Pin';
+import Profile from '../pages/Profile';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path={'/pin/:id'} element={<Pin />} />
             <Route path={'/information'} element={<Info />} />
             <Route path={'/auth'} element={<Login />} />
+            <Route path={'/profile'} element={<RequireAuth><Profile /></RequireAuth>} />
             <Route path={'/protected'} element={<RequireAuth><Protected /></RequireAuth>} />
             <Route path={'*'} element={<NotFound />} />
           </Routes>

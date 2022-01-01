@@ -1,0 +1,74 @@
+import styled from 'styled-components';
+
+
+// Styles
+const Page = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${({ color }) => color || '#eee' };
+  padding: 1rem;
+  overflow-y: scroll;
+`
+
+const Image = styled.img`
+  margin: 1rem auto;
+`
+
+const Header = styled.header`
+  width: 100%;
+  /* padding: 2rem 0 1rem 0; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, .05);
+  
+  .pin-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pin-options {
+    display: flex;
+    gap: 1rem;
+  }
+
+  button {
+    background-color: transparent;
+    color: #494949;
+    padding: .5rem 1.25rem;
+    border-radius: 1rem;
+    
+    &:focus, &:hover:not(:disabled) {
+      background-color: rgba(0, 0, 0, .05);
+
+    }
+
+    &::disabled {
+      color: red;
+    }
+  }
+
+  span {
+    display: block;
+    width: .5rem;
+    height: .5rem;
+    border-radius: 10rem;
+    background-color: #111;
+  }
+
+  img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 10rem;
+  }
+`
+
+export default {
+  Page,
+  Image,
+  Header
+}

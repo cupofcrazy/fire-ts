@@ -2,6 +2,7 @@ import type { User } from 'firebase/auth'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { useAuth } from '../../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom';
 import Nav from './Nav'
 import cn from 'classnames';
 import { UserDoc } from '../../types/index';
@@ -10,6 +11,7 @@ import { UserDoc } from '../../types/index';
 export const Header = () => {
   const { user, signOutWithGoogle } = useAuth()
   const [toggled, setToggled] = useState(false)
+  const navigate = useNavigate()
   const toggleSettings = () => {
     setToggled(!toggled)
   }
@@ -22,7 +24,7 @@ export const Header = () => {
             <ProfileImage user={user} />
           </button>
           {<StyledList className={cn({ active: toggled })}>
-            <StyledListItem>View Profile</StyledListItem>
+            <StyledListItem onClick={() => navigate('/profile')}>View Profile</StyledListItem>
             <StyledListItem onClick={signOutWithGoogle}>Logout</StyledListItem>
           </StyledList>
           }

@@ -21,8 +21,6 @@ interface AuthContextProps {
   setUser: React.Dispatch<React.SetStateAction<UserDoc | null>>;
   signInWithGoogle: () => Promise<void>;
   signOutWithGoogle: () => Promise<void>;
-  state: State,
-  dispatch: React.Dispatch<Action>,
   pinActions: {
     savePin: (pin: PinDocType) => Promise<void>
     unsavePin: (id: string) => Promise<void>
@@ -171,8 +169,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         setUser,
         signInWithGoogle,
         signOutWithGoogle,
-        pinActions,
-        state, dispatch
+        pinActions
       }}
     >
       {children}

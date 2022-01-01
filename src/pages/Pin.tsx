@@ -6,6 +6,8 @@ import { db } from '../lib/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { XIcon } from '@heroicons/react/outline';
 import { Dots } from '../components/ui';
+import { usePinReducer } from '../reducers/usePinReducer';
+import { Loading } from '../components/ui/Loading';
 
 
 const getPinById = async (id: string): Promise<DocumentData | null> => {
@@ -22,7 +24,8 @@ const getPinById = async (id: string): Promise<DocumentData | null> => {
 }
 
 const Pin = () => {
-  const { user, pinActions, state, dispatch } = useAuth()
+  const [state, dispatch] = usePinReducer()
+  const { user, pinActions } = useAuth()
   const [pin, setPin] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const params = useParams()
@@ -50,7 +53,7 @@ const Pin = () => {
   // Render
   return (
     <Styled.Page color={'#fff'}>
-      { loading ? <Dots /> : 
+      { loading ? <Loading /> : 
       <>
         <Styled.Header>
           <div className="pin-info">
@@ -61,11 +64,11 @@ const Pin = () => {
             </Link>
           </div>
           <div className="pin-options">
-            { state.isSaved ? <button onClick={() => unsavePin(pin?.id)} disabled={!state.isSaved}>Unsave</button> :
-            <button
-              onClick={() => savePin(pin)}
-              disabled={state.isSaving}>{ state.isSaved ? 'Saved' : state.isSaving ? 'Saving...' : 'Save' }</button>
-            }
+            { state.isSaved ? <button onClick={() => unsavePin(pin?.id)} disabled={!state.isSaved}>Unsave</button> : (
+              user && <button
+                onClick={() => savePin(pin)}
+                disabled={state.isSaving}>{ state.isSaved ? 'Saved' : state.isSaving ? 'Saving...' : 'Save' }</button>
+            )}
             <button>Show Details</button>
             { user?.uid === pin?.user?.uid && <button onClick={ () => deletePin(pin)}>Delete</button> }
             <button aria-label='Close' title="Close" onClick={() => navigate('/')}><XIcon width={24} height={24} /></button>

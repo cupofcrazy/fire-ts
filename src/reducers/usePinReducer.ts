@@ -6,12 +6,12 @@ import { useReducer } from 'react'
 *  loading state,
 *  and saves pins
 */
-type State = {
+export type State = {
   loading: boolean;
   isSaved: boolean;
   isSaving: boolean;
 }
-type Action = {
+export type Action = {
   type: 'CHECK_IF_PIN_SAVED',
   payload: boolean
 } | {
@@ -19,6 +19,8 @@ type Action = {
   payload: boolean
 } | {
   type: 'SAVE_PIN'
+} | {
+  type: 'UNSAVE_PIN'
 }
 
 const reducer = (state: State, action: Action): State => {
@@ -40,6 +42,13 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         loading: true,
         isSaving: true
+      }
+    case 'UNSAVE_PIN':
+      return {
+        ...state,
+        isSaving: false,
+        isSaved: false,
+        loading: false
       }
     default:
       return state

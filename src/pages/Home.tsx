@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 const Home = () => {
   const [start, setStart] = useState(6)
-  const [ pins, loading ] = useCollection('images', start, 'desc')
+  const [ pins, loading ] = useCollection('images', 'desc')
 
   const handleClick = () => {
     setStart(start + 6)

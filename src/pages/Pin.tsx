@@ -1,13 +1,11 @@
-import { deleteDoc, doc, DocumentData, getDoc, collection } from 'firebase/firestore';
+import { doc, DocumentData, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Styled from '../styles/pin-page.styles'
-import { db, storage } from '../lib/firebase';
+import { db } from '../lib/firebase';
 import { useAuth } from '../contexts/AuthContext';
-import { deleteObject, ref } from 'firebase/storage';
 import { XIcon } from '@heroicons/react/outline';
-import { setDoc } from '@firebase/firestore';
-import { usePinReducer } from '../reducers/usePinReducer';
+import { Dots } from '../components/ui';
 
 
 const getPinById = async (id: string): Promise<DocumentData | null> => {
@@ -24,61 +22,15 @@ const getPinById = async (id: string): Promise<DocumentData | null> => {
 }
 
 const Pin = () => {
-  const { user } = useAuth()
+  const { user, pinActions, state, dispatch } = useAuth()
   const [pin, setPin] = useState<any>(null)
-  const [state, dispatch] = usePinReducer()
   const [loading, setLoading] = useState(true)
   const params = useParams()
   const navigate = useNavigate()
 
-  // Save Pin
-  const savePin = async () => {
-    dispatch({
-      type: 'SAVE_PIN'
-    })
-    console.log('saving pin...')
-    const ref = doc(db, `users/${user?.uid!}/saves`, pin.id)
-    await setDoc(ref, {
-      id: pin.id
-    }, {
-      merge: true
-    })
-    // disable save button if pin is already saved
-    try {
-      await disablePin(pin.id)
-      dispatch({
-        type: 'PIN_SAVED',
-        payload: true
-      })
- 
-    } catch (e) {
-      console.log({ e })
-    }
-  }
+  // Destructure pin actions from auth context
+  const { savePin, deletePin, unsavePin, disablePin } = pinActions
 
-  // Disable "Save Pin" if already saved
-  const disablePin = async (id: string) => {
-    const pinRef = doc(db, `users/${user?.uid!}/saves`, id)
-    const pinSnapshot = await getDoc(pinRef)
-    if (pinSnapshot.exists()) {
-      return true
-    }
-    return false
-  }
-
-  // Delete pin if user's
-  const deletePin = async (id: string) => {
-    const pinRef = ref(storage, `images/${user?.username}/${pin.name}`)
-    try {
-      await deleteObject(pinRef)
-      await deleteDoc(doc(db, 'images', id))
-      console.log('Doc deleted successfully')
-      navigate('/')
-    } catch (e) {
-      console.error({ e })
-    }
-
-  }
 
   // Intial Page Load and checks
   useEffect(() => {
@@ -93,12 +45,12 @@ const Pin = () => {
       })
     })
     console.log(pin)
-  }, [state.isSaved, params.id])
+  }, [params.id])
 
   // Render
   return (
     <Styled.Page color={'#fff'}>
-      { loading ? <p style={{ fontSize: '20vw' }}>Loading...</p> : 
+      { loading ? <Dots /> : 
       <>
         <Styled.Header>
           <div className="pin-info">
@@ -109,9 +61,13 @@ const Pin = () => {
             </Link>
           </div>
           <div className="pin-options">
-            <button onClick={savePin} disabled={state.isSaved || state.isSaving}>{ state.isSaved ? 'Saved' : state.isSaving ? 'Saving...' : 'Save' }</button>
+            { state.isSaved ? <button onClick={() => unsavePin(pin?.id)} disabled={!state.isSaved}>Unsave</button> :
+            <button
+              onClick={() => savePin(pin)}
+              disabled={state.isSaving}>{ state.isSaved ? 'Saved' : state.isSaving ? 'Saving...' : 'Save' }</button>
+            }
             <button>Show Details</button>
-            { user?.uid === pin?.user?.uid && <button onClick={ () => deletePin(pin?.id)}>Delete</button> }
+            { user?.uid === pin?.user?.uid && <button onClick={ () => deletePin(pin)}>Delete</button> }
             <button aria-label='Close' title="Close" onClick={() => navigate('/')}><XIcon width={24} height={24} /></button>
           </div>
         </Styled.Header>

@@ -41,14 +41,17 @@ const Header = styled.header`
     color: #494949;
     padding: .5rem 1.25rem;
     border-radius: 1rem;
+    transition: all .3s ease;
     
     &:focus, &:hover:not(:disabled) {
       background-color: rgba(0, 0, 0, .05);
+      transition: all .3s ease;
 
     }
 
     &::disabled {
       color: red;
+      transition: all .3s ease;
     }
   }
 

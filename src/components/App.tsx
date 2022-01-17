@@ -11,11 +11,13 @@ import NotFound from '../pages/NotFound'
 import Protected from '../pages/Protected'
 import Pin from '../pages/Pin';
 import Profile from '../pages/Profile';
+import { ToastProvider } from '../contexts/ToastContext';
 
 function App() {
   return (
     <AppContainer id="app">
       <Router>
+      <ToastProvider>
         <AuthProvider>
           <Header />
           <Routes>
@@ -28,6 +30,7 @@ function App() {
             <Route path={'*'} element={<NotFound />} />
           </Routes>
         </AuthProvider>
+        </ToastProvider>
       </Router>
     </AppContainer>
   )

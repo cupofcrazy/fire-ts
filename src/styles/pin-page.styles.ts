@@ -33,13 +33,13 @@ const Header = styled.header`
 
   .pin-options {
     display: flex;
-    gap: 1rem;
+    gap: 0rem;
   }
 
   button {
     background-color: transparent;
     color: #494949;
-    padding: .5rem 1.25rem;
+    padding: .5rem 1rem;
     border-radius: 1rem;
     transition: all .3s ease;
     

@@ -7,7 +7,7 @@ export type PinDocType = {
   image: string,
   createdAt: Timestamp,
   metadata: {
-    color?: string,
+    color?: string | null,
     width?: number,
     height?: number,
     aspectRatio?: number

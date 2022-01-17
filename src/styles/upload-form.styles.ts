@@ -5,7 +5,7 @@ import { mq } from '../utils';
 const Form = styled.div`
   display: flex;
   height: 100vh;
-  flex-direction: column;
+  /* flex-direction: column; */
 
   @media ${mq.tablet} {
     flex-direction: row;
@@ -46,10 +46,11 @@ const Container = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  background-color: ${({ color }: { color: string | undefined }) => `${color ? color : 'rgba(1, 1, 1, .5)' }` };
+  bottom: 0;
+  right: 0;
+  background-color: ${({ color }: { color: string | undefined }) => `${color ? color : 'rgba(1, 1, 1, 1)' }` };
   transition: all .5s ease;
   backdrop-filter: saturate(300%) blur(25px);
-  opacity: 1;
   z-index: 9999;
 `
 

@@ -4,14 +4,17 @@ import { useAuth } from '../contexts/AuthContext';
 import { useCollection } from '../hooks/useCollection';
 import { PinGrid } from '../components/pins/PinGrid';
 import { Loading } from '../components/ui/Loading';
+import { query, collection, orderBy, getDocs, where } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 
 const Profile = () => {
   const { user } = useAuth()
-  const [savedPins, loading] = useCollection(`users/${user?.uid as string}/saves`, 'desc')
+  const [savedPins, setSavedPins] = useState<any>()
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    console.log(savedPins)
+    setLoading(false)
   }, [])
 
   return (
@@ -22,9 +25,9 @@ const Profile = () => {
           <Styled.ProfileImage src={user?.photoURL!} alt="Profile Image" />
           <h1>{ user?.displayName }</h1>
           <h3>@{ user?.username }</h3>
-          <p>Pins Saved: { savedPins.length }</p>
+          <p>Pins Saved: { savedPins?.length }</p>
         </Styled.Header>
-        <PinGrid pins={savedPins} />
+        {/* <PinGrid pins={savedPins} /> */}
       </Styled.Page>)}
     </>
   )

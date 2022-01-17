@@ -55,8 +55,8 @@ const StyledHeader = styled.header`
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 1);
-  /* backdrop-filter: saturate(300%) blur(25px); */
+  background-color: rgba(255, 255, 255, .5);
+  backdrop-filter: saturate(300%) blur(25px);
 `
 
 const StyledImage = styled.img`
@@ -68,14 +68,14 @@ const StyledImage = styled.img`
 
 const StyledList = styled.ul`
   width: 300px;
-  background-color: rgba(255, 255, 255, .65);
+  background-color: rgba(255, 255, 255, 1);
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, .05);
   position: fixed;
   top: 4.5rem;
   right: 1rem;
   padding: 1rem;
   border-radius: 1rem;
-  backdrop-filter: saturate(300%) blur(25px);
+  backdrop-filter: blur(25px);
   border: 1px solid rgba(0, 0, 0, .1);
   opacity: 0;
   visibility: hidden;

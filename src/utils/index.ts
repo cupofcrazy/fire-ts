@@ -35,7 +35,7 @@ export const rgbToHex = (r: number, g: number, b: number) => '#' + [r, g, b].map
 export const toMegaBytes = (num: number): string => `${(num / 1024 / 1024).toFixed(2)}MB`
 
 // Get dominant color from image
-export const getImageColor = (image: HTMLImageElement): string | undefined => {
+export const getImageColor = (image: HTMLImageElement): string => {
   const colorthief = new ColorThief()
 
   if (image?.complete) {
@@ -44,8 +44,7 @@ export const getImageColor = (image: HTMLImageElement): string | undefined => {
 
     return colorHex;
   }
-  // Return null if image is not loaded
-  return undefined
+  return '#EEE'
 }
 
 // env variable: Google Client ID

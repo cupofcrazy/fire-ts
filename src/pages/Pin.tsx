@@ -133,7 +133,7 @@ const Pin = () => {
             }
             <button><MdOutlineInfo size={20} /></button>
             { user?.uid === pin?.user?.uid && <button onClick={ () => deletePin(pin?.id)}><MdDeleteOutline size={20} /></button> }
-            <button aria-label='Close' title="Close" onClick={() => navigate('/')}><XIcon width={24} height={24} /></button>
+            <button aria-label='Close' title="Close" onClick={() => navigate('/')}><XIcon width={16} height={16} /></button>
           </div>
         </Styled.Header>
         <Styled.Image src={pin?.image} style={{ width: '50%' }} alt={pin?.id} />

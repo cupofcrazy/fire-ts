@@ -7,10 +7,10 @@ export type PinDocType = {
   image: string,
   createdAt: Timestamp,
   metadata: {
-    color?: string | null,
-    width?: number,
-    height?: number,
-    aspectRatio?: number
+    color: string,
+    width: number,
+    height: number,
+    aspectRatio: number
   },
   user: {
     uid: User["uid"],

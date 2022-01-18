@@ -41,11 +41,11 @@ const Header = styled.header`
     color: #494949;
     padding: .5rem 1rem;
     border-radius: 1rem;
-    transition: all .3s ease;
+    transition: all 1s ease;
     
     &:focus, &:hover:not(:disabled) {
-      background-color: rgba(0, 0, 0, .05);
-      transition: all .3s ease;
+      background: linear-gradient(#e0f2ff 0%, #ffc3dd 100%);
+      transition: all 1s ease;
 
     }
 
